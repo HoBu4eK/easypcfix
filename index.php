@@ -1,0 +1,79 @@
+<?php
+/*-------------------------------------------------------+
+| PHP-Fusion Content Management System
+| Copyright (C) PHP-Fusion Inc
+| https://www.php-fusion.co.uk/
++--------------------------------------------------------+
+| Filename: index.php
+| Author: PHP-Fusion Development Team
++--------------------------------------------------------+
+| This program is released as free software under the
+| Affero GPL license. You can redistribute it and/or
+| modify it under the terms of this license which you
+| can read by viewing the included agpl.txt or online
+| at www.gnu.org/licenses/agpl.html. Removal of this
+| copyright header is strictly prohibited without
+| written permission from the original author(s).
++--------------------------------------------------------*/
+require_once "maincore.php";
+
+$settings = fusion_get_settings();
+
+//Redirection from easypcfix.org to www.easypcfix.org
+//UNCOMMENT
+IF($_SERVER['HTTP_HOST']=="easypcfix.org" || $_SERVER['SERVER_NAME']=="easypcfix.org" || $_SERVER['HTTP_HOST']!="www.easypcfix.org" || $_SERVER['SERVER_NAME']!="www.easypcfix.org"){
+redirect("http://www.easypcfix.org/");
+}
+
+
+
+if ($settings['site_seo'] == "1" && !isset($_GET['aid'])) {
+
+    define("IN_PERMALINK", TRUE);
+
+    $router = new PHPFusion\Rewrite\Router();
+
+    $router->rewritePage();
+
+    $filepath = $router->getFilePath();
+
+    if (empty($filepath) && filter_var(PERMALINK_CURRENT_PATH, FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED)) {
+        redirect(PERMALINK_CURRENT_PATH);
+    }
+    else if (isset($_GET['lang']) && valid_language($_GET['lang'])) {
+        $lang = stripinput($_GET['lang']);
+        set_language($lang);
+        $redirectPath = clean_request("", array("lang"), FALSE);
+        redirect($redirectPath);
+    }
+    else if (isset($_GET['logout']) && $_GET['logout'] == "yes") {
+        $userdata = Authenticate::logOut();
+        redirect(BASEDIR."index.php");
+    } else if (!empty($filepath)) {
+        if ($filepath == "index.php") {
+            redirect($settings['opening_page']);
+        } else {
+            require_once $filepath;
+        }
+    } else {
+        if ($_SERVER['REQUEST_URI'] == $settings['site_path'].$settings['opening_page']
+            or $_SERVER['REQUEST_URI'] == $settings['site_path']."index.php"
+            or $_SERVER['REQUEST_URI'] == $settings['site_path']
+        ) {
+			redirect($settings['opening_page']);
+        } else {
+            $router->setPathtofile("error.php");
+            $params = array(
+                "code" => "404",
+            );
+            $router->setGetParameters($params);
+            $router->setservervars();
+            $router->setquerystring();
+            require_once fusion_get_settings("site_url")."error.php";
+        }
+    }
+} else if (empty($settings['opening_page']) || $settings['opening_page'] == "index.php" || $settings['opening_page'] == "/") {
+	redirect("home.php");
+} else {
+	redirect($settings['opening_page']);
+}
