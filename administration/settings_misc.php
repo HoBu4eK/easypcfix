@@ -28,6 +28,10 @@ if (isset($_POST['savesettings'])) {
 		"smtp_port" => form_sanitizer($_POST['smtp_port'], "", "smtp_port"),
 		"smtp_auth" => isset($_POST['smtp_auth']) && !empty($_POST['smtp_username']) && !empty($_POST['smtp_password']) ? TRUE : FALSE,
 		"smtp_username" => form_sanitizer($_POST['smtp_username'], "", "smtp_username"),
+		
+		"smtp_ssl" => form_sanitizer($_POST['smtp_ssl'], 0, "smtp_ssl"),
+		"smtp_password" => form_sanitizer($_POST['smtp_password'], "", "smtp_password"),
+		
 		"login_method" => form_sanitizer($_POST['login_method'], 0, "login_method"),
 		"thumb_compression" => form_sanitizer($_POST['thumb_compression'], 0, "thumb_compression"),
 		"mime_check" => form_sanitizer($_POST['mime_check'], 0, "mime_check"),
@@ -40,7 +44,6 @@ if (isset($_POST['savesettings'])) {
 		"comments_sorting" => form_sanitizer($_POST['comments_sorting'], "DESC", "comments_sorting"),
 		"index_url_bbcode" => form_sanitizer($_POST['index_url_bbcode'], 0, "index_url_bbcode"),
 		"index_url_userweb" => form_sanitizer($_POST['index_url_userweb'], 0, "index_url_userweb"),
-        "create_og_tags" => form_sanitizer($_POST['create_og_tags'], 0, "create_og_tags")
 	);
 	if (defender::safe()) {
 		foreach($inputData as $settings_name => $settings_value) {
@@ -78,6 +81,11 @@ echo form_text('smtp_username', $locale['666'], $settings['smtp_username'], arra
 	'inline' => TRUE));
 echo form_text('smtp_password', $locale['667'], $settings['smtp_password'], array('max_length' => 100,
 	'inline' => TRUE));
+	
+echo form_select('smtp_ssl', 'Use SSL', $settings['smtp_ssl'], array('options' => $choice_arr,
+	'inline' => TRUE));
+	
+	
 closeside();
 openside('');
 $opts = array('0' => $locale['no'], '1' => $locale['689'], '2' => $locale['690']);
@@ -114,7 +122,7 @@ closeside();
 openside('');
 echo form_select('index_url_bbcode', $locale['1031'], fusion_get_settings("index_url_bbcode"), array('options' => $choice_arr,
 	'width' => '100%'));
-echo form_select('index_url_userweb', $locale['1032'], fusion_get_settings("index_url_userweb"), array('options' => $choice_arr,
+echo form_select('index_url_userweb', $locale['1032'], fusion_get_settings("index_url_userseb"), array('options' => $choice_arr,
 	'width' => '100%'));
 closeside();
 echo "</div>\n</div>";
