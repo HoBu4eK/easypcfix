@@ -21,8 +21,8 @@ $settings = fusion_get_settings();
 
 //Redirection from easypcfix.org to www.easypcfix.org
 //UNCOMMENT
-IF($_SERVER['HTTP_HOST']=="easypcfix.org" || $_SERVER['SERVER_NAME']=="easypcfix.org" || $_SERVER['HTTP_HOST']!="www.easypcfix.org" || $_SERVER['SERVER_NAME']!="www.easypcfix.org"){
-redirect("http://www.easypcfix.org/");
+IF($_SERVER['HTTP_HOST']!=$settings['site_host'] || $_SERVER['SERVER_NAME']!=$settings['site_host']){
+redirect($settings['site_host']);
 }
 
 
