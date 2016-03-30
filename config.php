@@ -1,8 +1,8 @@
 <?php
 // database settings
 $db_host = 'localhost';
-$db_user = 'root';
-$db_pass = 'L0stt0wer!';
+$db_user = 'php_fusion';
+$db_pass = 'php_fusion';
 $db_name = 'fusion';
 $db_prefix = 'fusion5ZHpt_';
 $pdo_enabled = 1;
