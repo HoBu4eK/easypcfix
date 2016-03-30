@@ -478,6 +478,8 @@ if (isset($_POST['uninstall'])) {
 		"('smtp_port', '25')",
 		"('smtp_username', '')",
 		"('smtp_password', '')",
+		"('smtp_auth', '0')",
+		"('smtp_ssl', '0')",
 		"('bad_words_enabled', '1')",
 		"('bad_words', '')",
 		"('bad_word_replace', '****')",
@@ -516,7 +518,6 @@ if (isset($_POST['uninstall'])) {
 		"('recaptcha_type', 'text')",
 		"('allow_php_exe', '0')",
 		"('multiple_logins', '0')",
-		"('smtp_auth', '0')",
 		"('mime_check', '0')",
 		"('normalize_seo', '0')",
 		"('debug_seo', '0')",
@@ -657,10 +658,10 @@ if (isset($_POST['uninstall'])) {
 	$sl_sql .= implode(",\n", array_map(function ($language) {
         $locale = array();
 		include LOCALE.$language."/setup.php";
-		return "('".$locale['setup_3300']."', '0', '', 'index.php', '0', '2', '0', '1', '".$language."'),
-				('".$locale['setup_3305']."', '0', '', 'contact.php', '0', '1', '0', '8', '".$language."'),
-				('".$locale['setup_3309']."', '0', '', 'search.php', '0', '1', '0', '10', '".$language."'),
-				('".$locale['setup_3315']."', '0', '', 'submissions.php', '-101', '1', '0', '10', '".$language."'),
+		return "('".$locale['setup_3300']."', '0', 'home', 'index.php', '0', '2', '0', '1', '".$language."'),
+				('".$locale['setup_3305']."', '0', 'mail', 'contact.php', '0', '1', '0', '8', '".$language."'),
+				('".$locale['setup_3309']."', '0', 'search', 'search.php', '0', '1', '0', '10', '".$language."'),
+				('".$locale['setup_3315']."', '0', 'list-add', 'submissions.php', '-101', '1', '0', '10', '".$language."'),
 				('---', '0', '', '---', '-101', '1', '0', '11', '".$language."')";
 	}, explode('.', $enabled_languages)));
 	if (!dbquery($sl_sql)) {
