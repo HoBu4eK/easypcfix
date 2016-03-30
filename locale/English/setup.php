@@ -274,15 +274,39 @@ $locale['setup_3607'] = "Veteran Member";
 $locale['setup_3608'] = "Fusioneer";
 
 // Stage 6 - Sample Smileys
-$locale['setup_3620'] = "Smile";
-$locale['setup_3621'] = "Wink";
-$locale['setup_3622'] = "Sad";
-$locale['setup_3623'] = "Frown";
-$locale['setup_3624'] = "Shock";
-$locale['setup_3625'] = "Pfft";
-$locale['setup_3626'] = "Cool";
-$locale['setup_3627'] = "Grin";
-$locale['setup_3628'] = "Angry";
+$locale['setup_4620'] = "Angry";
+$locale['setup_4621'] = "Angel";
+$locale['setup_4622'] = "Armyman";
+$locale['setup_4623'] = "Big Smile";
+$locale['setup_4624'] = "Boss";
+$locale['setup_4625'] = "Confuse";
+$locale['setup_4626'] = "Cry";
+$locale['setup_4627'] = "Devil";
+$locale['setup_4628'] = "Dj";
+$locale['setup_4629'] = "Doubt";
+$locale['setup_4630'] = "Green";
+$locale['setup_4631'] = "Haha";
+$locale['setup_4632'] = "Hypnosis";
+$locale['setup_4633'] = "In Love";
+$locale['setup_4634'] = "Kiss";
+$locale['setup_4635'] = "Kissed";
+$locale['setup_4636'] = "Money";
+$locale['setup_4637'] = "Oops";
+$locale['setup_4638'] = "Party";
+$locale['setup_4639'] = "Pfff";
+$locale['setup_4640'] = "Sad";
+$locale['setup_4641'] = "Shock";
+$locale['setup_4642'] = "Shut up";
+$locale['setup_4643'] = "Shy";
+$locale['setup_4644'] = "Smile";
+$locale['setup_4645'] = "Swet";
+$locale['setup_4646'] = "Think";
+$locale['setup_4647'] = "Tire";
+$locale['setup_4648'] = "Tongue";
+$locale['setup_4649'] = "Wink";
+
+
+
 
 // Stage 6 - User Field Categories
 $locale['setup_3640'] = "Profile";

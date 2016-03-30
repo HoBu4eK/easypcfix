@@ -602,15 +602,45 @@ if (isset($_POST['uninstall'])) {
 		$fail = TRUE;
 	}
 	$smileys_sql = "INSERT INTO ".$db_prefix."smileys (smiley_code, smiley_image, smiley_text) VALUES ";
-	$smileys_sql .= implode(",\n", array("(':)', 'smile.gif', '".$locale['setup_3620']."')",
-		"(';)', 'wink.gif', '".$locale['setup_3621']."')",
-		"(':(', 'sad.gif', '".$locale['setup_3622']."')",
-		"(':|', 'frown.gif', '".$locale['setup_3623']."')",
-		"(':o', 'shock.gif', '".$locale['setup_3624']."')",
-		"(':P', 'pfft.gif', '".$locale['setup_3625']."')",
-		"('B)', 'cool.gif', '".$locale['setup_3626']."')",
-		"(':D', 'grin.gif', '".$locale['setup_3627']."')",
-		"(':@', 'angry.gif', '".$locale['setup_3628']."')"));
+	$smileys_sql .= implode(",\n", array(
+	
+	
+
+		
+		
+	"(':angry:', 'angry.png', '".$locale['setup_4620']."')",
+	"(':angel:', 'angel.png', '".$locale['setup_4621']."')",
+	"(':army:', 'armyman.png', '".$locale['setup_4622']."')",
+	"(':D', 'bigsmile.png', '".$locale['setup_4623']."')",
+	"(':boss:', 'boss.png', '".$locale['setup_4624']."')",
+	"(':S', 'confuse.png', '".$locale['setup_4625']."')",
+	"(';(', 'cry.png', '".$locale['setup_4626']."')",
+	"(':devil:', 'devil.png', '".$locale['setup_4627']."')",
+	"(':dj:', 'dj.png', '".$locale['setup_4628']."')",
+	"(':doubt:', 'doubt.png', '".$locale['setup_4629']."')",
+	"(':green:', 'green.png', '".$locale['setup_4630']."')",
+	"(':haha:', 'haha.png', '".$locale['setup_4631']."')",
+	"(':hypnosis:', 'hypnosis.png', '".$locale['setup_4632']."')",
+	"(':inlove:', 'inlove.png', '".$locale['setup_4633']."')",
+	"(':kiss:', 'kiss.png', '".$locale['setup_4634']."')",
+	"(':kissed:', 'kissed.png', '".$locale['setup_4635']."')",
+	"(':money:', 'money.png', '".$locale['setup_4636']."')",
+	"(':o', 'oops.png', '".$locale['setup_4637']."')",
+	"(':party:', 'party.png', '".$locale['setup_4638']."')",
+	"(':P', 'pfff.png', '".$locale['setup_4639']."')",
+	"(':(', 'sad.png', '".$locale['setup_4640']."')",
+	"(':shock:', 'shock.png', '".$locale['setup_4641']."')",
+	"(':shutup:', 'shutup.png', '".$locale['setup_4642']."')",
+	"(':shy:', 'shy.png', '".$locale['setup_4643']."')",
+	"(':)', 'smile.png', '".$locale['setup_4644']."')",
+	"(':swet:', 'swet.png', '".$locale['setup_4645']."')",
+	"(':think:', 'think.png', '".$locale['setup_4646']."')",
+	"(':tire:', 'tire.png', '".$locale['setup_4647']."')",
+	"(':tongue:', 'tongue.png', '".$locale['setup_4648']."')",
+	"(';)', 'wink.png', '".$locale['setup_4649']."')"		
+		
+		
+		));
 	if (!dbquery($smileys_sql)) {
 		$fail = TRUE;
 	}
