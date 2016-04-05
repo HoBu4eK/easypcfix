@@ -19,6 +19,8 @@ require_once "maincore.php";
 require_once THEMES."templates/header.php";
 include LOCALE.LOCALESET."contact.php";
 add_to_title($locale['global_200'].$locale['400']);
+add_breadcrumb(array('link'=>FUSION_FILELINK, 'title'=>$locale['400']));
+echo render_breadcrumbs();
 $settings = fusion_get_settings();
 $input = array(
 	'mailname'	=> '',
@@ -58,28 +60,30 @@ if (isset($_POST['sendmessage'])) {
 			FROM ".DB_EMAIL_TEMPLATES."
 			WHERE template_key='CONTACT'
 			LIMIT 1");
+			
+			$full_subj = $input['mailname']." ".$input['email'].": ".$input['subject'];
 		if (dbrows($template_result)) {
-			$template_data = dbarray($template_result);
+					$template_data = dbarray($template_result);
 			if ($template_data['template_active'] == "1") {
-				if (!sendemail_template("CONTACT", $input['subject'], $input['message'], "", $template_data['template_sender_name'], "", $template_data['template_sender_email'], $input['mailname'], $input['email'])) {
+				if (!sendemail_template("CONTACT", $full_subj, $input['message'], "", $template_data['template_sender_name'], "", $template_data['template_sender_email'], $input['mailname'], $input['email'])) {
 					$defender->stop();
 					addNotice('warning', $locale['425']);
 				}
 			} else {
-				if (!sendemail($settings['siteusername'], $settings['siteemail'], $input['mailname'], $input['email'], $input['subject'], $input['message'])) {
+				if (!sendemail($settings['siteusername'], $settings['siteemail'], $settings['siteusername'], $settings['siteemail'], $full_subj, $input['message'])) {
 					$defender->stop();
 					addNotice('warning', $locale['425']);
 				}
 			}
 		} else {
-			if (!sendemail($settings['siteusername'], $settings['siteemail'], $input['mailname'], $input['email'], $input['subject'], $input['message'])) {
+			if (!sendemail($settings['siteusername'], $settings['siteemail'], $settings['siteusername'], $settings['siteemail'], $full_subj, $input['message'])) {
 				$defender->stop();
 				addNotice('warning', $locale['425']);
 			}
 		}
-		opentable($locale['400']);
-		echo "<div class='alert alert-success' style='text-align:center'><br />\n".$locale['440']."<br /><br />\n".$locale['441']."</div><br />\n";
-		closetable();
+
+		echo "<div class='alert alert-success' style='text-align:center'><br />\n".$locale['440n']."<br /><br />\n".$locale['441']."</div><br />\n";
+		redirect($settings['siteurl'],2);
 	}
 }
 opentable($locale['400']);
