@@ -185,10 +185,10 @@ class Forum {
 
                     if ($time !== 'today') {
 						//$timeCol = "AND ((post_datestamp >= '".intval($time_array[$time])."' OR t.thread_lastpost >= '".intval($time_array[$time])."') AND (post_datestamp <= '".intval($time_stop)."' OR t.thread_lastpost <= '".intval($time_stop)."')) ";
-						$timeCol = "AND ((post_datestamp BETWEEN ".intval($time_array[$time])." AND NOW()) OR
-						(thread_lastpost BETWEEN ".intval($time_array[$time])." AND NOW())) ";
+						$timeCol = "AND ((p2.post_datestamp >= '".intval($time_array[$time])."' OR t.thread_lastpost >= '".intval($time_array[$time])."') AND
+						(p2.post_datestamp <= '".intval($time_stop)."' OR t.thread_lastpost <= '".intval($time_stop)."')) ";
 					} else {
-						$timeCol = "AND (post_datestamp >= '".intval($time_array[$time])."' OR t.thread_lastpost >= '".intval($time_stop)."') ";
+						$timeCol = "AND (p2.post_datestamp >= '".intval($time_array[$time])."' OR t.thread_lastpost <= '".intval($time_stop)."') ";
 					}
 
 				}
@@ -424,12 +424,14 @@ class Forum {
                                 SELECT
 								count(t.thread_id) 'thread_max_rows',
 								count(a1.attach_id) 'attach_image',
-								count(a2.attach_id) 'attach_files'
+								count(a2.attach_id) 'attach_files',
+								p2.post_datestamp, t.*
 								FROM ".DB_FORUM_THREADS." t
 								LEFT JOIN ".DB_FORUMS." tf ON tf.forum_id = t.forum_id
 								INNER JOIN ".DB_USERS." tu1 ON t.thread_author = tu1.user_id
 								LEFT JOIN ".DB_USERS." tu2 ON t.thread_lastuser = tu2.user_id
 								LEFT JOIN ".DB_FORUM_POSTS." p1 ON p1.thread_id = t.thread_id and p1.post_id = t.thread_lastpostid
+								LEFT JOIN ".DB_FORUM_POSTS." p2 ON p2.thread_id = t.thread_id
 								LEFT JOIN ".DB_FORUM_POLLS." p ON p.thread_id = t.thread_id
 								LEFT JOIN ".DB_FORUM_VOTES." v ON v.thread_id = t.thread_id AND p1.post_id = v.post_id
 								LEFT JOIN ".DB_FORUM_ATTACHMENTS." a1 on a1.thread_id = t.thread_id AND a1.attach_mime IN ('".implode(",", img_mimeTypes() )."')
@@ -457,7 +459,7 @@ class Forum {
 								$t_result = dbquery("
                                 SELECT t.*, tu1.user_name AS author_name, tu1.user_status AS author_status, tu1.user_avatar as author_avatar,
 								tu2.user_name AS last_user_name, tu2.user_status AS last_user_status, tu2.user_avatar AS last_user_avatar,
-								p1.post_datestamp, p1.post_message,
+								p1.post_datestamp, p2.post_datestamp, p1.post_message,
 								p.forum_poll_title,
 								count(v.post_id) AS vote_count,
 								a1.attach_name, a1.attach_id,
