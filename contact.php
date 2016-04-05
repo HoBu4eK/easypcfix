@@ -19,8 +19,6 @@ require_once "maincore.php";
 require_once THEMES."templates/header.php";
 include LOCALE.LOCALESET."contact.php";
 add_to_title($locale['global_200'].$locale['400']);
-add_breadcrumb(array('link'=>FUSION_FILELINK, 'title'=>$locale['400']));
-echo render_breadcrumbs();
 $settings = fusion_get_settings();
 $input = array(
 	'mailname'	=> '',
@@ -29,8 +27,7 @@ $input = array(
 	'message'	=> '',
 	'captcha_code' => '',
 	);
-	
-opentable($locale['400']);
+
 if (isset($_POST['sendmessage'])) {
 	foreach ($input as $key => $value) {
 		if (isset($_POST[$key])) {
@@ -47,26 +44,45 @@ if (isset($_POST['sendmessage'])) {
 			$input[$key] = form_sanitizer($input[$key], $input[$key], $key);
 		}
 	}
+
 	$_CAPTCHA_IS_VALID = FALSE;
 	include INCLUDES."captchas/".$settings['captcha']."/captcha_check.php"; // Dynamics need to develop Captcha. Before that, use method 2.
 	if ($_CAPTCHA_IS_VALID == FALSE) {
 		$defender->stop();
 		addNotice('warning', $locale['424']);
 	}
-
 	if (!defined('FUSION_NULL')) {
 		require_once INCLUDES."sendmail_include.php";
-
-			if (!sendcontactus($input['mailname'], $input['email'], $input['subject'], $input['message'])) {
+		$template_result = dbquery("
+			SELECT template_key, template_active, template_sender_name, template_sender_email
+			FROM ".DB_EMAIL_TEMPLATES."
+			WHERE template_key='CONTACT'
+			LIMIT 1");
+		if (dbrows($template_result)) {
+			$template_data = dbarray($template_result);
+			if ($template_data['template_active'] == "1") {
+				if (!sendemail_template("CONTACT", $input['subject'], $input['message'], "", $template_data['template_sender_name'], "", $template_data['template_sender_email'], $input['mailname'], $input['email'])) {
+					$defender->stop();
+					addNotice('warning', $locale['425']);
+				}
+			} else {
+				if (!sendemail($settings['siteusername'], $settings['siteemail'], $input['mailname'], $input['email'], $input['subject'], $input['message'])) {
+					$defender->stop();
+					addNotice('warning', $locale['425']);
+				}
+			}
+		} else {
+			if (!sendemail($settings['siteusername'], $settings['siteemail'], $input['mailname'], $input['email'], $input['subject'], $input['message'])) {
 				$defender->stop();
 				addNotice('warning', $locale['425']);
 			}
-		echo "<div class='alert alert-success' style='text-align:center'><br />\n".$locale['440']."<br />\n".$locale['441']."<br>You will be redirected to main page in 3 seconds.</div><br />\n";
-		redirect(BASEDIR."home.php", 3);
+		}
+		opentable($locale['400']);
+		echo "<div class='alert alert-success' style='text-align:center'><br />\n".$locale['440']."<br /><br />\n".$locale['441']."</div><br />\n";
 		closetable();
 	}
-}else{
-
+}
+opentable($locale['400']);
 $message = str_replace("[SITE_EMAIL]", hide_email(fusion_get_settings('siteemail')), $locale['401']);
 $message = str_replace("[PM_LINK]", "<a href='messages.php?msg_send=1'>".$locale['global_121']."</a>", $message);
 echo $message."<br /><br />\n";
@@ -93,5 +109,4 @@ echo "</div>\n</div>\n";
 echo closeform();
 echo "<!--contact_sub_idx-->";
 closetable();
-}
 require_once THEMES."templates/footer.php";
