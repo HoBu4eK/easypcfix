@@ -134,10 +134,10 @@ $locale['u152'] = '
 				<td align="center" bgcolor="#f6f6f7"><table border="0" cellpadding="0" cellspacing="0"><tr><td width="150"><div class="username" style="color:#3cbff3; font-weight: bold; font-family: trebuchet ms;">Your Login: </div></td><td><div class="username" style="color:#3cbff3; font-weight: bold; font-family: trebuchet ms;">USER_NAME</div></td></tr><tr><td><div class="username" style="color:#3cbff3; font-weight: bold; font-family: trebuchet ms;">Your Password: </div></td><td><div class="username" style="color:#3cbff3; font-weight: bold; font-family: trebuchet ms;">USER_PASSWORD</div></td></tr></table></td>
 				</tr>
 				<tr>
-				<td align="center" bgcolor="#f6f6f7"><div class="date">DATE</div></td>
+				<td align="center" bgcolor="#f6f6f7"><div class="date">'.date("d, M Y", time()).'</div></td>
 				</tr>	
 				<tr>
-				<td align="center" bgcolor="#f6f6f7">&nbsp;</td>
+				<td align="center" bgcolor="#f6f6f7">&nbsp; </td>
 				</tr>					
 			</table>
 		
@@ -150,7 +150,7 @@ $locale['u152'] = '
 				<td align="center"><div class="main">We are ready to set up your SITENAME account.<br> Click the button below to...</div><br></td>
 				</tr>
 				<tr>
-				<td align="center" height="50"><a href="ACTIVATION_LINK" title="Activate Account"><img src="http://www.easypcfix.org/themes/templates/button.png" alt="Activate your Account"></td>
+				<td align="center" height="50"><a href="ACTIVATION_LINK" title="Activate Account"><img src="http://www.easypcfix.org/themes/templates/button.png" alt="Activate your Account"><br></td>
 				</tr>
 				<tr>
 				<td align="center"><div style=""><a href="mailto:admin@easypcfix.org" class="mail" style="text-decoration: none; color:#a2a8ad; font-weight: bold; font-family: trebuchet ms; font-size:13;">Admin@easypcfix.org</a></div></td>
@@ -167,7 +167,7 @@ $locale['u152'] = '
 		<td bgcolor="#ebebeb" class="td-footer"><img src="http://www.easypcfix.org/themes/templates/bottom_bg.jpg"></td>
 	</tr>
 	<tr>
-		<td bgcolor="#ebebeb" align="center"><div class="mail" style="text-decoration: none; color:#a2a8ad; font-weight: bold; font-family: trebuchet ms; font-size:13;">SITE_URL &copy;2016</div></td>
+		<td bgcolor="#ebebeb" align="center"><div class="mail" style="text-decoration: none; color:#a2a8ad; font-weight: bold; font-family: trebuchet ms; font-size:13;">EasyPcFix Leicester, UK &copy;2016</div></td>
 	</tr>
 </table>
 </td></tr>

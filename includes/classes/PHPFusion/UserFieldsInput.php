@@ -467,7 +467,6 @@ class UserFieldsInput {
 		$message = str_replace("ACTIVATION_LINK", $activationUrl, $message);
 		$message = str_replace("SITE_HOST", $settings['site_host'], $message);
 		$message = str_replace("SITE_URL", $settings['siteurl'], $message);
-		$message = str_replace("DATE", date("d, M Y", time()), $message);
 		
         $subject = str_replace("[SITENAME]", fusion_get_settings("sitename"), $locale['u151']);
 
