@@ -17,127 +17,71 @@
 +--------------------------------------------------------*/
 if (!defined("IN_FUSION")) { die("Access Denied"); }
 
-function sendemail($toname, $toemail, $fromname, $fromemail, $subject, $message, $type = "plain", $cc = "", $bcc = "") {
-	global $settings, $locale;
 
-	require_once CLASSES."PHPMailer/PHPMailerAutoload.php";
-	$mail = new PHPMailer();
+function sendemail($toname, $toemail, $fromname, $fromemail, $subject, $message, $type = "html", $cc = "", $bcc = ""){
+	global $settings;
 
-	
-ini_set('default_charset', 'UTF-8');
-$mail->SMTPDebug = 3;
-$mail->Debugoutput = 'html';
-	
-	if (file_exists(CLASSES."PHPMailer/language/phpmailer.lang-".$locale['phpmailer'].".php")) {
-		$mail->SetLanguage($locale['phpmailer'], CLASSES."PHPMailer/language/");
-	} else {
-		$mail->SetLanguage("en", CLASSES."PHPMailer/language/");
-	}
-	if (!$settings['smtp_host']) {
-		$mail->IsMAIL();
-	} else {
-		$mail->IsSMTP();
-		
-		
+//PEAR
+require_once CLASSES."PHPPEAR/Mail.php";
+require_once CLASSES."PHPPEAR/Mail/mime.php";
+  
+//HEADERS
+$from = $fromname." <".$fromemail.">";
+$to = $toname." <".$toemail.">";
 
-		
-		
-$mail->Host       = $settings['smtp_host'];
-$mail->Port       = $settings['smtp_port'];
-$mail->SMTPSecure = $settings['smtp_ssl'] ? 'ssl' : '';
-$mail->SMTPAuth = $settings['smtp_auth'] ? true : false;
-$mail->Username   = $settings['smtp_username'];
-$mail->Password   = $settings['smtp_password'];
-	}
-$mail->CharSet = 'utf-8';
+ 
+ 
 
 
-$mail->From = $settings['siteemail'];
-$mail->FromName = "Administrator";
-$mail->setFrom($settings['siteemail'], "Administrator");
-$mail->addReplyTo($fromemail, $fromname);
-$mail->addAddress($toemail, $toname);
 
-	if ($cc) {
-		$cc = explode(", ", $cc);
-		foreach ($cc as $ccaddress) {
-			$mail->AddCC($ccaddress);
-		}
-	}
-	if ($bcc) {
-		$bcc = explode(", ", $bcc);
-		foreach ($bcc as $bccaddress) {
-			$mail->AddBCC($bccaddress);
-		}
-	}
-	if ($type == "plain") {
-		$mail->IsHTML(FALSE);
-	} else {
-		$mail->IsHTML(TRUE);
-	}
-	
-$mail->Subject  = $subject;
 
-$mail->msgHTML($message);
-$mail->AltBody = 'This is a plain-text message body';
-
-	if (!$mail->Send()) {
-		$mail->ErrorInfo;
-		$mail->ClearAllRecipients();
-		$mail->ClearReplyTos();
-		return FALSE;
-	} else {
-		$mail->ClearAllRecipients();
-		$mail->ClearReplyTos();
-		return TRUE;
-	}
+//CONNECTION SETTINGS
+if($settings['smtp_ssl']==1){
+	$host = "ssl://".$settings['smtp_host'].":".$settings['smtp_port'];			
+}else{
+$port = $settings['smtp_port'];
+$host = $settings['smtp_host'];
 }
 
 
-
-function sendcontactus($fromname, $fromemail, $subject, $message) {
-	global $settings, $locale;
-	require_once CLASSES."PHPMailer/PHPMailerAutoload.php";
-	$mail = new PHPMailer();
-	
-		$mail->IsMAIL();
-	ini_set('default_charset', 'UTF-8');
-	$mail->CharSet = 'utf-8';
-	
-	//$mail->Hostname = "easypcfix.org";
-	$mail->From = $settings['siteemail'];
-	$mail->FromName = "Administrator";
-	$mail->setFrom($settings['siteemail'], "Administrator"); //dnc
-	$mail->addReplyTo($fromemail, $fromname);
-	$mail->addAddress($settings['siteemail'], "Administrator");
-	
-		$mail->IsHTML(TRUE);
-
-
-	$mail->Subject  = $subject;
-	
-	$mail->msgHTML($message);
-	$mail->AltBody = 'This is a plain-text message body';
-	
-	if (!$mail->Send()) {
-		$mail->ErrorInfo;
-		echo $mail->ErrorInfo;
-		$mail->ClearAllRecipients();
-		$mail->ClearReplyTos();
-		return FALSE;
-	} else {
-		$mail->ClearAllRecipients();
-		$mail->ClearReplyTos();
-		return TRUE;
-	}
+$auth = $settings['smtp_auth'] ? true : false;
+$crlf = "\n";
+if($auth==true){
+	$username = $settings['smtp_username'];
+	$password = $settings['smtp_password'];
+}else{
+	$username = "";
+	$password = "";	
 }
 
+$headers = array ('From' => $from, 'To' => $to, 'Subject' => $subject);
+
+//connecting to smtp
+$smtp = Mail::factory('smtp', array ('host' => $host, 'auth' => $auth, 'username' => $username, 'password' => $password, 'port' => $port));
+ 
+//processing html
+$mime = new Mail_mime($crlf);
+$mime->setHTMLBody($message);
+$body = $mime->get();
+$headers = $mime->headers($headers);
 
 
+ 
+ 
+ 
+ //sendmail
+ $mail = $smtp->send($to, $headers, $body);
+ 
+ if (PEAR::isError($mail)) {
+   echo("<p>" . $mail->getMessage() . "</p>");
+   return FALSE;
+  } else {
 
-
-
-
+   return TRUE;
+  }
+  
+  
+}
 
 function sendemail_template($template_key, $subject, $message, $user, $receiver, $thread_url = "", $toemail, $sender = "", $fromemail = "") {
 	global $settings;
@@ -170,3 +114,4 @@ function sendemail_template($template_key, $subject, $message, $user, $receiver,
 		return FALSE;
 	}
 }
+
