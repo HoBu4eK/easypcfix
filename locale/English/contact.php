@@ -19,7 +19,7 @@ $locale['423'] = "You must specify a Message";
 $locale['424'] = "You must enter correct Validation Code";
 $locale['425'] = "Internal error: cannot send your message.";
 // Message Sent
-$locale['440'] = "Your Message has been sent";
+$locale['440n'] = "Your Message has been sent";
 $locale['441'] = "Thank You";
 $locale['442'] = "Your message was not sent for the following reason(s):";
 $locale['443'] = "Please try again.";
