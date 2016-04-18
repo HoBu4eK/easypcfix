@@ -23,6 +23,8 @@ $locale = fusion_get_locale();
 
 $userdata = fusion_get_userdata();
 
+$news_keywords = get_settings("news");
+
 $data = array(
 	'news_id' => 0,
 	'news_draft' => 0,
@@ -30,7 +32,7 @@ $data = array(
 	'news_news' => '',
 	'news_datestamp' => time(),
 	'news_extended' => '',
-	'news_keywords' => '',
+	'news_keywords' => $news_keywords['news_default_keyword'],
 	'news_breaks' => 'n',
 	'news_allow_comments' => 1,
 	'news_allow_ratings' => 1,
