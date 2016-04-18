@@ -26,6 +26,9 @@ if (isset($_POST['savesettings'])) {
 		"news_allow_submission_files" => form_sanitizer($_POST['news_allow_submission_files'], 0, "news_allow_submission_files"),
 		"news_extended_required" => isset($_POST['news_extended_required']) ? 1 : 0,
 		"news_pagination" => form_sanitizer($_POST['news_pagination'], 0, "news_pagination"),
+		
+		"news_default_keyword" => form_sanitizer($_POST['news_default_keyword'], 0, "news_default_keyword"),
+		
 		"news_image_link" => form_sanitizer($_POST['news_image_link'], 0, 'news_image_link'),
 		"news_image_frontpage" => form_sanitizer($_POST['news_image_frontpage'], 0, 'news_image_frontpage'),
 		"news_image_readmore" => form_sanitizer($_POST['news_image_readmore'], 0, 'news_image_readmore'),
@@ -129,6 +132,28 @@ echo "
 	</div>
 </div>
 ";
+echo "
+<div class='row'>
+	<div class='col-xs-12 col-sm-3'>
+		<label for='calc_b'>".$locale['news_0205b']."</label>
+	</div>
+	<div class='col-xs-12 col-sm-9'>
+	".form_select('news_default_keyword', '', $news_settings['news_default_keyword'], array(
+	'max_length' => 320,
+	'placeholder' => $locale['news_0205a'],
+	'width' => '100%',
+	'error_text' => $locale['news_0255a'],
+	'tags' => TRUE,
+	'multiple' => TRUE
+))."
+	</div>
+</div>
+";
+
+
+
+
+
 closeside();
 openside("");
 echo form_select("news_allow_submission", $locale['news_0400'], $news_settings['news_allow_submission'], array(

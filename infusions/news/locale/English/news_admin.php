@@ -52,6 +52,7 @@ $locale['news_0204'] = "Extended:";
 $locale['news_0203b'] = "News Content";
 $locale['news_0205'] = "Keywords:";
 $locale['news_0205a'] = "Hit enter after each keywords";
+$locale['news_0205b'] = "Default Keywords:";
 $locale['news_0206'] = "Start Date:";
 $locale['news_0207'] = "End Date:";
 $locale['news_0208'] = "(Optional)";
@@ -75,6 +76,7 @@ $locale['news_0252'] = "Delete this news category?";
 $locale['news_0253'] = "%s are disabled for all items.\n\rThis setting will only take effect when they are enabled again.";
 $locale['news_0254'] = "There are no news in this category.";
 $locale['news_0255'] = "Please specify keywords";
+$locale['news_0255a'] = "Please specify default keywords";
 // News Categories form
 $locale['news_0300'] = "Category Name:";
 $locale['news_0301'] = "Category Image:";
