@@ -81,6 +81,15 @@ if (isset($_GET['readmore']) && isnum($_GET['readmore'])) {
             nl2br(parse_textarea($data['news_extended'] ? $data['news_extended'] : $data['news_news'])) :
             parse_textarea($data['news_extended'] ? $data['news_extended'] : $data['news_news'])
         );
+		
+		
+		$admin_actions = array();
+		if (iADMIN && checkrights("N")) {
+			$admin_actions = array(
+				"edit" => INFUSIONS."news/news_admin.php".$aidlink."&amp;action=edit&amp;section=news_form&amp;news_id=".$data['news_id'],
+				"delete" => INFUSIONS."news/news_admin.php".$aidlink."&amp;action=delete&amp;section=nform&amp;news_id=".$data['news_id'],
+			);
+		}
 		$pagecount = count($news_news);
 		$news_info = array(
 			"news_id" => $data['news_id'],
@@ -110,15 +119,10 @@ if (isset($_GET['readmore']) && isnum($_GET['readmore'])) {
 			'news_allow_ratings' => $data['news_allow_ratings'],
 			"news_sticky" => $data['news_sticky'],
 			"print_link" => BASEDIR."print.php?type=N&amp;item_id=".$data['news_id'],
+			"admin_actions" => $admin_actions,
 		);
 
-		$admin_actions = array();
-		if (iADMIN && checkrights("N")) {
-			$admin_actions = array(
-				"edit" => INFUSIONS."news/news_admin.php".$aidlink."&amp;action=edit&amp;section=nform&amp;news_id=".$news_info['news_id'],
-				"delete" => INFUSIONS."news/news_admin.php".$aidlink."&amp;action=delete&amp;section=nform&amp;news_id=".$news_info['news_id'],
-			);
-		}
+
 
 		if (fusion_get_settings("create_og_tags")) {
 			add_to_head("<meta property='og:title' content='".$data['news_subject']."' />");
@@ -142,6 +146,7 @@ if (isset($_GET['readmore']) && isnum($_GET['readmore'])) {
 						   'title' => $data['news_subject']
 					   ));
 		$info['news_item'] = $news_info;
+		$info['admin_actions'] = $admin_actions;
 		$info['news_item']['page_count'] = $pagecount;
 	} else {
 		redirect(INFUSIONS."news/news.php");
@@ -321,15 +326,15 @@ if (isset($_GET['readmore']) && isnum($_GET['readmore'])) {
 			if ($news_settings['news_image_frontpage'] == 0) {
 				if ($data['news_image'] && file_exists(IMAGES_N.$data['news_image'])) {
 					$imageSource = IMAGES_N.$data['news_image'];
-				}
-				if ($data['news_image_t2'] && file_exists(IMAGES_N_T.$data['news_image_t2'])) {
+				}elseif ($data['news_image_t2'] && file_exists(IMAGES_N_T.$data['news_image_t2'])) {
 					$imageSource = IMAGES_N_T.$data['news_image_t2'];
-				}
-				if ($data['news_image_t1'] && file_exists(IMAGES_N_T.$data['news_image_t1'])) {
+				}elseif ($data['news_image_t1'] && file_exists(IMAGES_N_T.$data['news_image_t1'])) {
 					$imageSource = IMAGES_N_T.$data['news_image_t1'];
-				}
+				}				
+
+
 			}
-			$image = "<img class='img-responsive' src='".$imageSource."' alt='".$data['news_subject']."' />\n";
+			$image = "<img class='img-responsive asd' style='width:100; height:150px;' src='".$imageSource."' alt='".$data['news_subject']."' />\n";
 			if ($data['news_extended'] !== "") {
 				$news_image = "<a class='img-link' href='
 					".($news_settings['news_image_link'] == 0 ? INFUSIONS."news/news.php?cat_id=".$data['news_cat'] : INFUSIONS."news/news.php?readmore=".$data['news_id'])."
@@ -337,6 +342,27 @@ if (isset($_GET['readmore']) && isnum($_GET['readmore'])) {
 			} else {
 				$news_image = $image;
 			}
+			
+			//image config for list view
+			$image_l = "<img class='img-responsive asd' src='".$imageSource."' alt='".$data['news_subject']."' />\n";
+			if ($data['news_extended'] !== "") {
+				$news_image_l = "<a class='img-link' href='
+					".($news_settings['news_image_link'] == 0 ? INFUSIONS."news/news.php?cat_id=".$data['news_cat'] : INFUSIONS."news/news.php?readmore=".$data['news_id'])."
+					'>".$image_l."</a>\n";
+			} else {
+				$news_image_l = $image;
+			}			
+			
+		$admin_actions = array();
+		if (iADMIN && checkrights("N")) {
+			$admin_actions = array(
+				"edit" => INFUSIONS."news/news_admin.php".$aidlink."&amp;action=edit&amp;section=news_form&amp;news_id=".$data['news_id'],
+				"delete" => INFUSIONS."news/news_admin.php".$aidlink."&amp;action=delete&amp;section=nform&amp;news_id=".$data['news_id'],
+			);
+		}
+			
+
+			
 			$news_cat_image = "<a href='".($news_settings['news_image_link'] == 0 ? "".INFUSIONS."news/news.php?cat_id=".$data['news_cat'] : INFUSIONS."news/news.php?readmore=".$data['news_id'])."'>";
 			if ($data['news_image_t2'] && $news_settings['news_image_frontpage'] == 0) {
 				$news_cat_image .= $image."</a>";
@@ -363,6 +389,7 @@ if (isset($_GET['readmore']) && isnum($_GET['readmore'])) {
 				"cat_name" => $data['news_cat_name'],
 				"cat_image" => $news_cat_image,
 				"news_image" => $news_image,
+				"news_image_l" => $news_image_l,
 				'news_image_src' => $imageSource,
 				"news_ext" => $data['news_extended'] ? "y" : "n",
 				"news_reads" => $data['news_reads'],
@@ -373,6 +400,7 @@ if (isset($_GET['readmore']) && isnum($_GET['readmore'])) {
 				"news_allow_ratings" => $data['news_allow_ratings'],
 				"news_sticky" => $data['news_sticky'],
 				"print_link" => BASEDIR."print.php?type=N&amp;item_id=".$data['news_id'],
+				"admin_actions" => $admin_actions,
 			);
 		}
 		$info['news_items'] = $news_info;
